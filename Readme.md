@@ -3,7 +3,13 @@
 ## Base:	Raspberry Pi and sensor modules
 ## OS:	Linux(Debian Wheezy) sep-2014
 
-###### ** Hardware: **	
+###### Content
+**Additional Software and libs:**	
+>1.	**wiringpi** Gordons library to talk with pins and devices on RaspberryPi
+>2.	**Festival** is an text to speech engine
+>3.	**Pocketsphinx** is an Speech Recognition engine
+
+**Hardware:**	
 >1.	RPI Model B 2 rev 2
 >2.	Camera Module Board REV 1.3 5MP Webcam Video 1080p OV5647 For Raspberry Pi
 >3.	mcp 23017 E/SP dip 28
@@ -19,9 +25,9 @@
 >13.	a couple of jumpers,cables,screws,nuts and so on :)...
 >14.		... _more will be described here later_ ...
 
->** Description:**
+>**Description:**
 
->** Abilities:**
+>**Abilities:**
 
 >Come here more often to keep up to date :)
 >Also visit  [my site](hellcreator.esy.es)
