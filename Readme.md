@@ -1,9 +1,10 @@
-Project EHRA:	"E-home indor Robotic Assistant"
-Goal:	Study RPI and HW involved programming
-Base:	Raspberry Pi and sensor modules
-OS:	Linux(Debian Wheezy) sep-2014
-Hardware:	
-		1.	RPI Model B 2 rev 2
+# Project EHRA:	"E-home indor Robotic Assistant"
+## Goal:	Study RPI and HW involved programming
+## Base:	Raspberry Pi and sensor modules
+## OS:	Linux(Debian Wheezy) sep-2014
+
+###### Hardware:	
+>		1.	RPI Model B 2 rev 2
 		2.	Camera Module Board REV 1.3 5MP Webcam Video 1080p OV5647 For Raspberry Pi
 		3.	mcp 23017 E/SP dip 28
 		4.	uln2003
@@ -18,9 +19,9 @@ Hardware:
 		11.	a couple of jumpers,cables,screws,nuts and so on :)...
 		12.		... more will be described here later ...
 
-Description:
+** Description:**
 
-Abilities:
+** Abilities:**
 
 Come here more often to keep up to date :)
 
