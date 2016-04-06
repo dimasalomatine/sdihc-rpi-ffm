@@ -3,7 +3,7 @@
 ## Base:	Raspberry Pi and sensor modules
 ## OS:	Linux(Debian Wheezy) sep-2014
 
-###### *Hardware:	
+###### * Hardware: *	
 > 1.	RPI Model B 2 rev 2
 2.	Camera Module Board REV 1.3 5MP Webcam Video 1080p OV5647 For Raspberry Pi
 3.	mcp 23017 E/SP dip 28
@@ -21,10 +21,10 @@
 
 >* Description:
 
-* Abilities:
+>* Abilities: *
 
-Come here more often to keep up to date :)
-Also visit  [my site](hellcreator.esy.es)
-Yours 
-Dmitry Salomatine aKa Hellcreator
+>Come here more often to keep up to date :)
+>Also visit  [my site](hellcreator.esy.es)
+>_ Yours _
+_Dmitry Salomatine aKa Hellcreator_
 
