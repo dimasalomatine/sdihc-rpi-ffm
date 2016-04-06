@@ -1,0 +1,28 @@
+Tip: Use tee command to redirect to both a file and the screen same time
+
+The syntax is:
+
+ 
+command1 |& tee log.txt
+## or ##
+command1 -arg |& tee log.txt
+## or ##
+command1 2>&1 | tee log.txt
+
+command1 > log.txt 2>&1
+command1 -arg > log.txt 2>&1
+
+------------------------------
+
+Syntax to redirect both output (stdout) and errors (stderr) to different files
+
+The syntax:
+
+ 
+command1 > out.txt 2> err.txt
+command2 -f -z -y > out.txt 2> err.txt
+
+-------------------------------------------------------------
+This will redirect both STDOUT and STDERR to the same file:
+
+some_command 2>&1 | tee file.log

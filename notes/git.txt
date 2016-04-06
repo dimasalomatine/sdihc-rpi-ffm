@@ -1,0 +1,16 @@
+
+#clone
+cd projects
+mkdir project1
+git clone https://github.com/dimasalomatine/sdihc-rpi-ffm.git
+
+#commit flow
+git status
+git add file.ext
+git commit -m "desc"
+git push
+
+#update from remote into local
+git pull
+
+

@@ -1,0 +1,110 @@
+
+
+Install supporting packages
+------------------------------------------------
+
+Speech output requires a few audio software packages to be installed on your RPi. They may be already there but it does no harm to try to install these listed below anyway. The installer will let you know if the package is already present on your RPi. The instructions below are based on the Raspbian distribution (August 2012).
+
+Firstly I recommend updating your Raspbian distribution if you have not recently already done so. Speech did not work for me until I did this. This may take 30 - 60 minutes depending on your connection speed etc. To do this:
+
+sudo apt-get update
+sudo apt-get upgrade
+
+If you do not already have sound on your RPi then you will need the alsa sound utilities:
+
+ sudo apt-get install alsa-utils
+
+and edit the file /etc/modules using:
+
+ sudo nano /etc/modules
+
+to have line:
+
+ snd_bcm2835 
+
+If this line is already there then leave the file as is!
+
+Install the mplayer audio/movie player with:
+
+sudo apt-get install mplayer
+
+To sort out the mplayer error message, edit file /etc/mplayer/mplayer.conf using:
+
+ sudo nano /etc/mplayer/mplayer.conf
+
+to add line
+
+nolirc=yes
+
+
+------------------------------------------------------------------------
+
+Festival Text to Speech
+------------------------------------------------------------------------
+
+Worked fine and produces a voice like a rough sounding robot. This may be just what you need if you are adding speech to your RPi robot project.
+
+Install Festival with:
+
+ sudo apt-get install festival
+
+Try out Festival with:
+
+ echo “Just what do you think you're doing, Dave?” | festival --tts
+
+or to speak RPi’s IP address:
+
+ hostname -I | festival --tts
+
+
+
+-------------------------------------------------------------------------
+
+Speech Recognition
+
+Here are some options for speech recognition engines:
+
+    Pocketsphinx - A version of Sphinx that can be used in embedded systems (e.g., based on an ARM processor).
+
+        Pros: Under active development and incorporates features such as fixed-point arithmetic and efficient algorithms for GMM computation. All the processing takes place on the Raspberry Pi, so it is capable of being used offline. It supports real time speech recognition
+
+        Cons: It is complicated to set up and understand for beginners. For me, it was too inaccurate for my application. All the processing takes place on the Raspberry Pi, making it a bit slower.
+
+        Installation instructions:
+
+            Download the latest stable versions of Sphinxbase and Pocketsphinx:
+
+            $ wget http://sourceforge.net/projects/cmusphinx/files/sphinxbase/0.8/sphinxbase-0.8.tar.gz
+            $ wget http://sourceforge.net/projects/cmusphinx/files/pocketsphinx/0.8/pocketsphinx-0.8.tar.gz
+
+            Extract the downloaded files:
+
+            $ tar -zxvf pocketsphinx-0.8.tar.gz; rm -rf pocketsphinx-0.8.tar.gz
+            $ tar -zxvf sphinxbase-0.8.tar.gz; rm -rf sphinxbase-0.8.tar.gz
+
+            To compile these packages, you'll need to install bison and the ALSA development headers. 
+
+NOTE: It is important that the ALSA headers be installed before you build Sphinxbase. Otherwise, Sphinxbase will not use ALSA. It also appears that ALSA will not be used if PulseAudio is installed (a bad thing for developers like me).
+
+$ sudo apt-get install bison libasound2-dev
+
+cd into the Sphinxbase directory and type the following commands:
+
+$ ./configure --enable-fixed
+$ sudo make
+$ sudo make install
+
+cd into the Pocketsphinx directory and type the following commands:
+
+$ ./configure
+$ sudo make
+$ sudo make install
+
+Test out Pocketsphinx by running:
+
+$ src/programs/pocketsphinx_continuous -samprate 48000 
+
+If you want to tweak it, I recommend you read some information on the CMUSphinx Wiki.
+
+
+
