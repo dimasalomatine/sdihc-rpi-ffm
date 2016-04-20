@@ -1,7 +1,7 @@
 /*
  * aaa.c
  * 
- * Copyright 2014 dima <dima@debian>
+ * Copyleft 2014 dima <dima@debian>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
