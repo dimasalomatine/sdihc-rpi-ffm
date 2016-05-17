@@ -87,7 +87,7 @@ main.o: /usr/include/stdc-predef.h /usr/include/libio.h
 main.o: /usr/include/_G_config.h /usr/include/wchar.h /usr/include/string.h
 main.o: /usr/include/xlocale.h ../src/params.h ../src/sdisys.h
 main.o: ../src/sdi_coref.h ../src/modextern.h ../src/gapptypes.h
-main.o: ../src/gyro.h ../src/gsm.h ../src/display.h ../src/motorctrl.h
-main.o: /usr/include/stdlib.h /usr/include/alloca.h /usr/include/unistd.h
-main.o: /usr/include/getopt.h /usr/include/pthread.h /usr/include/endian.h
-main.o: /usr/include/sched.h /usr/include/time.h
+main.o: ../src/gyro.h ../src/gsm.h ../src/display.h /usr/include/stdlib.h
+main.o: /usr/include/alloca.h /usr/include/unistd.h /usr/include/getopt.h
+main.o: /usr/include/pthread.h /usr/include/endian.h /usr/include/sched.h
+main.o: /usr/include/time.h

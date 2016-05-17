@@ -1,39 +1,35 @@
-/*
- * untitled.c
- * 
- * Copyright 2014 dima <dima@debian>
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA 02110-1301, USA.
- * 
- * 
- */
-
 
 #include <stdio.h>
+#include <string.h>
+
 
 #include "params.h"
-
 #include "sdisys.h"
+#include "sdi_coref.h"
+#include "gyro.h"
+#include "gsm.h"
+#include "display.h"
+#include "motorctrl.h"
 
-#include "aaa.h"
+#include <stdlib.h>
+#include <string>
+#include <iostream>
 
+
+using namespace std;
+
+
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
 #include <wiringPi.h>
 #include <mcp23017.h>
-
-#include "sdi_coref.h"
+#include <unistd.h>
+#include <pthread.h>
+#if defined(__cplusplus)
+}
+#endif
 
 #define BASE_I2C        456
 
@@ -65,10 +61,28 @@ int main(int argc, char **argv)
 {
 	printf("hello\n");
 	
-	cfg_dt cfg=load_config(argc,argv);
-	printf("config loaded==>loglevel=%d\t\nlogfile=%s\n",cfg.log_level,cfg.logfile);
+	Gyro g;
+	g.init(TYPE_I2C,0x0);
 	
-	f(argc, argv);
+	Display d;
+	d.init(TYPE_I2C,0x0);
+	
+	Gsm gs;
+	gs.init(TYPE_I2C,0x0);
+	
+	Motor m1;
+	m1.init(TYPE_I2C,0x20);
+	
+	printf("ter2 %d\n",g.doaction(0,2,1,2));
+	printf("ter2 %d\n",g.doaction(1,3,1,2,3));
+	printf("ter2 %d\n",g.doaction(2,4,1,2,3,9));
+	printf("ter2 %d\n",g.doaction(88,1,55));
+	
+	
+	cfg_dt cfg=load_config(argc,argv);
+	printf("config type loaded=%d=>loglevel=%d\t\nlogfile=%s\n",cfg.configmode,cfg.log_level,cfg.logfile);
+	
+	// from aaa.h test f(argc, argv);
 	
 	
 	if(1!=f_sysinit(cfg.itype,cfg.use_exit_critical_function))
@@ -107,4 +121,3 @@ int main(int argc, char **argv)
 	release_config(&cfg);
 	return 0;
 }
-

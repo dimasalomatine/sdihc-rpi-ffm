@@ -1,0 +1,111 @@
+<!-- MHonArc v2.6.19 -->
+<!--X-Subject: Simple embedded hello world C example for 5.1 -->
+<!--X-From-R13: Ivax Enivyyr &#60;jvaxNfnivyyr.pbz> -->
+<!--X-Date: Tue, 8 Jun 2010 22:36:01 &#45;0300 -->
+<!--X-Message-Id: AANLkTikw0hnOCiuvZckEGvfmF3Bv6cTToIol62yHmSTA@mail.gmail.com -->
+<!--X-Content-Type: multipart/alternative -->
+<!--X-Head-End-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+    <title>Simple embedded hello world C example for 5.1</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<LINK TYPE="text/css" REL="stylesheet" HREF="/styles/main.css">
+<table cellpadding="0" cellspacing="0" border="0" width="1%" align=right>
+  <tbody>
+    <tr>
+        <td><a href="/">
+        <img src="/images/nav-logo.png" alt="lua-users home" width="177" height="40" border="0"></a></td>
+    </tr>
+    <tr>
+        <td>
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tbody>
+            <tr>
+                <td><img src="/images/nav-elbow.png" alt="" width="48" height="40"></td>
+                <td nowrap="true" valign="middle" width="100%">
+                    <a href=".." class="nav">lua-l archive</a></td>
+            </tr>
+            </tbody>
+        </table>
+        </td>
+    </tr>
+  </tbody>
+</table>
+<br clear=all>
+
+</head>
+<body>
+<!--X-Body-Begin-->
+<!--X-User-Header-->
+<!--X-User-Header-End-->
+<!--X-TopPNI-->
+[<a href="msg00152.html">Date Prev</a>][<a href="msg00154.html">Date Next</a>][<a href="msg00146.html">Thread Prev</a>][<a href="msg00154.html">Thread Next</a>]
+[<A HREF="index.html#00153">Date Index</A>]
+[<A HREF="threads.html#00153">Thread Index</A>]
+
+<!--X-TopPNI-End-->
+<!--X-MsgBody-->
+<!--X-Subject-Header-Begin-->
+
+<!--X-Subject-Header-End-->
+<!--X-Head-of-Message-->
+<p><ul>
+<li><b>Subject</b>: <b>Simple embedded hello world C example for 5.1</b></li>
+<li><b>From</b>: Wink Saville &lt;wink@<a href="/cgi-bin/echo.cgi?saville.com">...</a>&gt;</li>
+<li><b>Date</b>: Tue, 8 Jun 2010 18:35:10 -0700</li>
+</ul>
+<!--X-Head-of-Message-End-->
+<!--X-Head-Body-Sep-Begin-->
+<hr>
+<!--X-Head-Body-Sep-End-->
+<!--X-Body-of-Message-->
+Today, was my first stab at trying Lua and I had trouble<div>getting an embedded Lua hello world C program&#xA0;working.</div><div>All&#xA0;of the examples I found on the internet didn&#39;t&#xA0;work for me.</div><div><br></div><div>I&#39;d also suggest including the command line to compile,</div>
+<div>as that was also not obvious. Below is what worked for</div><div>me on my Linux box.</div><div><br></div><div><br></div><div><div>Make the linux version:</div><div>&#xA0;&#xA0;$ make linux</div><div><br></div><div>Add the hello_world.c program below to the root of lua source tree</div>
+<div>and compile:</div><div>&#xA0;&#xA0;$ gcc hello_world.c -o hello_world -I src/ -L src -llua -ldl -lm</div><div><br></div><div>Run:</div><div>&#xA0;&#xA0;$ ./hello_world</div><div>&#xA0;&#xA0;Yo dude</div><div>&#xA0;&#xA0;I&#39;m here too</div><div>&#xA0;&#xA0;Hello world, from Lua 5.1!</div>
+<div><br></div><div><br></div><div>// The hello program</div><div>#include &lt;stdio.h&gt;</div><div>#include &quot;src/lua.h&quot;</div><div>#include &quot;src/lualib.h&quot;</div><div>#include &quot;src/lauxlib.h&quot;</div>
+<div><br></div><div>int main(int argc, char *argv[]) {</div><div>&#xA0;&#xA0;// Open lua</div><div>&#xA0;&#xA0;lua_State *L = lua_open();</div><div><br></div><div>&#xA0;&#xA0;// Load the libraries</div><div>&#xA0;&#xA0;luaL_openlibs(L);</div><div><br></div><div>
+&#xA0;&#xA0;// Execution of a lua string</div><div>&#xA0;&#xA0;luaL_dostring(L, &quot;print \&quot;Yo dude\&quot;&quot;);</div><div><br></div><div>&#xA0;&#xA0;// Load a string and then execute it.</div><div>&#xA0;&#xA0;luaL_loadstring(L, &quot;io.write(\&quot;I&#39;m here too\\n\&quot;)&quot;);</div>
+<div>&#xA0;&#xA0;lua_pcall(L, 0, LUA_MULTRET, 0);</div><div><br></div><div>&#xA0;&#xA0;// Load from a file and then execute</div><div>&#xA0;&#xA0;if (luaL_loadfile(L, &quot;test/hello.lua&quot;) == 0) {</div><div>&#xA0;&#xA0; &#xA0;// File loaded call it</div><div>&#xA0;&#xA0; &#xA0;lua_pcall(L, 0, LUA_MULTRET, 0);</div>
+<div>&#xA0;&#xA0;}</div><div><br></div><div>&#xA0;&#xA0;// Close lua</div><div>&#xA0;&#xA0;lua_close (L);</div><div><br></div><div>&#xA0;&#xA0;return 0;</div><div>}</div></div><div><br></div>
+
+<!--X-Body-of-Message-End-->
+<!--X-MsgBody-End-->
+<!--X-Follow-Ups-->
+<hr>
+<ul><li><strong>Follow-Ups</strong>:
+<ul>
+<LI><STRONG><a name="00154" href="msg00154.html">Re: Simple embedded hello world C example for 5.1</a>, </STRONG><EM>KHMan</EM></LI>
+<LI><STRONG><a name="00155" href="msg00155.html">Re: Simple embedded hello world C example for 5.1</a>, </STRONG><EM>Luiz Henrique de Figueiredo</EM></LI>
+</ul></li></ul>
+<!--X-Follow-Ups-End-->
+<!--X-References-->
+<!--X-References-End-->
+<!--X-BotPNI-->
+<ul>
+<li>Prev by Date:
+<strong><a href="msg00152.html">Re: lxyssl (AES binding), CFB en</a></strong>
+</li>
+<li>Next by Date:
+<strong><a href="msg00154.html">Re: Simple embedded hello world C example for 5.1</a></strong>
+</li>
+<li>Previous by thread:
+<strong><a href="msg00146.html">Re: how to handle # operator for proxy tables?</a></strong>
+</li>
+<li>Next by thread:
+<strong><a href="msg00154.html">Re: Simple embedded hello world C example for 5.1</a></strong>
+</li>
+<li>Index(es):
+<ul>
+<li><a href="index.html#00153"><strong>Date</strong></a></li>
+<li><a href="threads.html#00153"><strong>Thread</strong></a></li>
+</ul>
+</li>
+</ul>
+
+<!--X-BotPNI-End-->
+<!--X-User-Footer-->
+<!--X-User-Footer-End-->
+</body>
+</html>

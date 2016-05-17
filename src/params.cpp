@@ -23,9 +23,18 @@
 #include "params.h"
 #include <stdlib.h>
 #include <malloc.h>
+#include <unistd.h>
+#include <string.h>
 
-void init_config(cfg_dt *a)
+void init_config(char*file,cfg_dt *a)
 {
+	a->configmode=0;
+	if(strlen(file)>0){
+	a->configmode=1;
+	printf ( "init_config load:%s\n",file) ;
+	}else{
+		 printf ( "init_config load default...\n") ;
+		}
 	a->logfile=NULL;
 	a->log_level=3;
 	a->itype=1;
@@ -35,12 +44,24 @@ void init_config(cfg_dt *a)
 cfg_dt load_config(int argc, char **argv)
 {
 	cfg_dt ret;
-	init_config(&ret);
+	char cCurrentPath[FILENAME_MAX];
+	char confPath[FILENAME_MAX];
+	if(argc>1){
+		sprintf(confPath,"%s",argv[1]);
+		}
+	init_config(confPath,&ret);
 	printf ( "<enter>load_config\n") ;
+	if (!getcwd(cCurrentPath, sizeof(cCurrentPath)))
+     {
+     sprintf(cCurrentPath,"%s","~/");
+     }
+    cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
+	
+	printf ( "module %s base path %s\n",argv[0],cCurrentPath) ;
 	ret.logfile=(char*)malloc(512);
 	if(ret.logfile!=NULL)
 	{
-		sprintf(ret.logfile,"%s","log.txt");
+		sprintf(ret.logfile,"%s/%s",cCurrentPath,"sdieh.log");
 		}
 	printf ( "<exit>load_config\n") ;
 	return ret;

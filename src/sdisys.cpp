@@ -1,6 +1,6 @@
 
 /*
- * sdisys.c
+ * sdisys.cpp
  * 
  * Copyright 2014 dima <dima@debian>
  * 
@@ -24,6 +24,7 @@
 
 #include "sdisys.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <wiringPi.h>
 
 int f_sysinit(int itype,int use_exit)
@@ -50,7 +51,7 @@ int f_sysinit(int itype,int use_exit)
     if(code<0){
 		 ret=0;
          fprintf (stderr, "<f_sysinit>wiringPiSetupSys setup failed\n") ;
-         printf ( "wiringPiSetup setup failed wit code %d \n",code) ;
+         printf ( "wiringPiSetup setup failed with code %d \n",code) ;
 		 if(use_exit==1)
 		 {
 			 exit(1);

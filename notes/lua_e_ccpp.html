@@ -1,0 +1,1990 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="en" />
+  <meta name="description" content="Tips for a Debian GNU/Linux System Administrator." />
+<meta name="keywords"  content="Debian System Administration News, Debian Sysadmin, Linux Administration, Linux Sysadmin, Sysadmin" />
+<meta name="copyright" content="(c) 2004-2015 Debian Administration" />
+<meta name="author"  content="Debian Administration" />
+<meta name="robots" content="index,follow" />
+<meta name="resource-type" content="document" />
+<meta name="classification" content="Personal" />
+<meta name="language" content="en" />
+<link rel="icon" href="/favicon.ico"  />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="top"    title="home"    href="/"  />
+<link rel="stylesheet" type="text/css" href="/css/view.css" media="screen" title="Site Layout" />
+<link rel="search" title="Search" href="/about/search" />
+<link rel="alternate" title="Debian Administration RSS" href="/articles.rdf" type="application/rdf+xml" />
+<link rel="alternate" title="Atom" href="/atom.xml" type="application/atom+xml" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+  
+
+  <link rel="canonincal" href="http://www.debian-administration.org/article/264/Embedding_a_scripting_language_inside_your_C/C_code">
+
+
+  <title>Embedding a scripting language inside your C/C++ code</title>
+
+  <!--[if lte IE 6]>
+   <style type='text/css'>
+    * html #main, * html #container {height:1%}
+   </style>
+  <![endif]-->
+  <!--[if !lt IE 6]><!-->
+  <link rel="stylesheet" type="text/css" href="/css/jquery.socialshareprivacy.min.css">
+<!-- jQuery: remotely, then locally -->
+    <link rel="stylesheet" type="text/css" href="/css/jquery.autocomplete.css" />
+    <script src="/js/jquery-1.9.0.min.js" type="text/javascript"></script>
+    <script src="/js/jquery.autocomplete.js" type="text/javascript"></script>
+    <script src="/js/jquery.autogrow.js"     type="text/javascript"></script>
+  <script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = '//api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+  </script>
+  <script type="text/javascript" src="/js/jquery.sidebarToggler.102.js"></script>
+  <script type="text/javascript">
+<!--//--><![CDATA[//><!--
+$(function() {
+  $("#rightcol").toggleSidebar({animation: "queuedEffects",
+				initState:"shown",
+				event:"click",
+				triggerShow: "Menu"});
+});
+//--><!]]>
+   </script>
+<!--<![endif]-->
+
+
+<script type="text/javascript">
+
+      var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-37997217-1']);
+          _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                          })();
+
+                      </script>
+ </head>
+ <body>
+   <div id="header">
+     <h1><a href="/">Debian Administration</a></h1>
+     <ul>
+       <li><a href="/about/Debian%20Administration">About</a></li>
+       <li><a href="/archive/">Archive</a></li>
+       <li><a href="/about/Contribute">Contribute</a></li>
+       <li><a href="/about/FAQ">FAQ</a></li>
+       <li><a href="/about/Search">Search</a></li>
+       <li><a href="/tag/">Tags</a></li>
+     </ul>
+   </div>
+    <div id="wrapper">
+      <div id="content">
+        <div id="container">
+            <div id="inner">
+                <div id="main">
+
+
+<script type="text/javascript" src="/js/jquery.socialshareprivacy.min.js"></script>
+<script type="text/javascript">
+  <!--//--><![CDATA[//><!--
+$.fn.socialSharePrivacy.settings.path_prefix = '/';
+
+$(function() {
+     $('.share').socialSharePrivacy();
+});
+  //--><!]]>
+</script>
+
+
+       <div class="article">
+       <!-- headline + section name -->
+       <h2 class="title">Embedding a scripting language inside your C/C++ code</h2>
+
+       <div class="tagline"><p>Posted by  <a href="/users/Steve">Steve</a> on Tue  4 Oct 2005  at 11:07 </p></div>
+
+
+<!-- tag start -->
+  <script>
+function addTag(url)
+{
+    $("#current_tags").load( url,
+                             function() {
+                                 $("#new_tag").val( "" )
+                                 $("#add_tag").hide()
+                             })
+
+}
+
+ $(document).ready(function(){
+    $("#new_tag").autocomplete("/ajax/complete");
+    $('a#toggle').click(function() {
+       $('#add_tag').toggle(400);
+     })
+
+} )
+</script>
+<div class="tags">
+  <span id="current_tags">Tags: 
+
+<a href="/tag/development" title="Find more content with this tag" rel="tag">development</a>, 
+
+<a href="/tag/lua" title="Find more content with this tag" rel="tag">lua</a>, 
+
+<a href="/tag/scripting languages" title="Find more content with this tag" rel="tag">scripting languages</a>
+
+</span>
+  
+</div>
+
+<!-- tag end -->
+
+       <p>There are many scripting languages which may be embedded into applications.  Some languages have evolved this ability over time, and others have been designed from the ground up as embedded languages.  One of the languages specifically designed for embedded use is Lua.</p>
+<p>Here we're going to examine using the <a href="http://www.lua.org/">Lua Scripting Language</a> and embedding it inside a C application.</p>
+<p>One of my recent hobbies has been the creation of simple games, reminiscent of those I used to play upon <a href="http://www.worldofspectrum.org/">my first computer</a>.</p>
+<p>Whilst writing games isn't something that will appeal to all Debian users, or sysadmins, there <i>are</i> a lot of uses to which a program can put an embedded scripting language - so that is the motivation for posting this here.</p>
+<p>To start with you'll need to install the libraries.  That can easily be done with :</p>
+<pre>
+apt-get install liblua50-dev
+</pre>
+<p>This will give you a set of development libraries, header files, and other things required to build <tt>lua</tt> scripted applications.</p>
+<p>Once installed you can compile and link your applications using the <tt>lua-config</tt> helper.  This will allow you to generate the compiler flags necessary:</p>
+<pre>
+skx@vilya:~$ lua-config --include --libs
+-I/usr/include/lua50 -L/usr/include -llualib50 -llua50
+</pre>
+<p>Once installed you will want your C, or C++, code to do three things:</p>
+<ul>
+<li>Initialise Lua</li>
+<li>Call from C into a Lua script.</li>
+<li>Call from Lua into your C application.</li>
+</ul>
+<p>Each of these jobs will be demonstrated with a small example.</p>
+
+<b>Initialising Lua</b>
+<blockquote>
+<p>The most simple example we'll look at involves initialising the <tt>lua</tt> scripting engine, after it has been linked into your application.</p>
+<p>The code would look like this:</p>
+<pre>
+#include &lt;stdio.h&gt;
+
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+/* the Lua interpreter */
+lua_State* L;
+
+int main ( int argc, char *argv[] )
+{
+	/* initialize Lua */
+	L = lua_open();
+
+	/* load various Lua libraries */
+	lua_baselibopen(L);
+        luaopen_table(L);
+        luaopen_io(L);
+        luaopen_string(L);
+        luaopen_math(L);
+    
+	/* cleanup Lua */
+	lua_close(L);
+
+	return 0;
+}
+</pre>
+<p>(You may <a href="/articles/264/">download this file</a>.)</p>
+<p>Once you've saved this as <tt>init.c</tt> you can compile it and build it like so:</p>
+<pre>
+skx@vilya:~$ gcc -o init -Wall `lua-config --include --libs` init.c
+skx@vilya:~$ 
+</pre>
+<p>Executing the code, predictably, does nothing:</p>
+<pre>
+skx@vilya:~$ ./init 
+skx@vilya:~$ 
+</pre>
+<p>This is because we've written no real code.  We merely initialise an interpreter instance and then immediately clean it up.  The various <tt>luaopen_</tt> functions are worthy of note, they perform a job equivilent to loading some standard libraries.  If you don't include them you will be unable to use some of the standard functions - by ommitting them you can "sandbox" your scripts a little.</p>
+<p>To do something useful we must move on.</p>
+</blockquote>
+
+
+<b>Calling from C into a Lua script.</b>
+<blockquote>
+<p>Loading and calling into <tt>Lua</tt> scripts from your C code is the whole point of the <tt>lua</tt> language.  So there are several ways you can do this.</p>
+<p>The most basic is to load a single source file and execute it in its entirety - much like running <tt>system( "perl someScript.pl" );</tt>.</p>
+<p>The more general purpose way of calling <tt>Lua</tt> code from C is to push arguments to the function upon the stack and then make a call.</p>
+<p>We will show an example of both kinds of code.  The first is the simplest.</p>
+<p>Imagine we have a lua script, called <tt>do-me.lua</tt> with the following contents:</p>
+<pre>
+print "Start"
+for i=1,10 do
+   print(i) 
+end
+print "End"
+</pre>
+<p>(This script merely executes a loop - printing the numbers 1 through 10.)</p>
+<p>We can load and execute this script by the following code:</p>
+<pre>
+#include &lt;stdio.h&gt;
+
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+/* the Lua interpreter */
+lua_State* L;
+
+int main ( int argc, char *argv[] )
+{
+	/* initialize Lua */
+	L = lua_open();
+
+	/* load Lua base libraries */
+	lua_baselibopen(L);
+
+	/* run the script */
+	lua_dofile(L, "do-me.lua");
+
+	/* cleanup Lua */
+	lua_close(L);
+
+	return 0;
+}
+</pre>
+<p>(This file is <a href="/articles/264/">available for download</a>.)</p>
+<p>Compiling this code is a simple process, similar to the last one:</p>
+<pre>
+skx@vilya:~$ gcc -o do-me -Wall `lua-config --include --libs` do-me.c
+</pre>
+<p>Once we have the compiled C program we can execute it to see the <tt>Lua</tt> script <tt>do-me.lua</tt> executed:</p>
+<pre>
+skx@vilya:~$ ./do-me 
+Start
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+End
+</pre>
+<p>That was a useful enough example.  But it isn't great.  Instead if you're building your extensible application you'll want to call specific user defined functions - allowing users to override basic operations, etc.</p>
+<p>For the next example we'll write a <tt>lua</tt> function which will calculate the sum of two numbers.  Then call it from C.</p>
+<p>The process will look like this:</p>
+<ul>
+<li>Find the function.</li>
+<li>Push the arguments onto the stack.</li>
+<li>Call the function, specifying the arguments we've pushed.</li>
+<li>Get the return value.</li>
+</ul>
+<p>This code, saved in the file <tt>add.c</tt>, looks like this:</p>
+<pre>
+#include &lt;stdio.h&gt;
+
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+
+/* the Lua interpreter */
+lua_State* L;
+
+int main ( int argc, char *argv[] )
+{
+	int sum;
+	
+	/* initialize Lua */
+	L = lua_open();
+
+	/* load Lua base libraries */
+	lua_baselibopen(L);
+
+	/* load the script */
+	lua_dofile(L, "add.lua");
+	
+	/* the function name */
+	lua_getglobal(L, "add");
+
+	/* the first argument */
+	lua_pushnumber(L, 41 );
+
+	/* the second argument */
+	lua_pushnumber(L, 22 );
+
+	/* call the function with 2
+	   arguments, return 1 result */
+	lua_call(L, 2, 1);
+
+	/* get the result */
+	sum = (int)lua_tonumber(L, -1);
+	lua_pop(L, 1);
+
+	/* print the result */
+	printf( "The result is %d\n", sum );
+
+	/* cleanup Lua */
+	lua_close(L);
+
+	return 0;
+}
+</pre>
+<p>(This file is <a href="/articles/264/">available for download</a>.)</p>
+<p>Compiling is as before:</p>
+<pre>
+skx@vilya:~$ gcc -o add -Wall `lua-config --include --libs` add.c
+skx@vilya:~$ 
+</pre>
+<p>With the proper lua script file, <tt>add.lua</tt>:</p>
+<pre>
+function add ( x, y )
+	return x + y
+end
+</pre>
+<p>We can now run the program:</p>
+<pre>
+skx@vilya:~$ ./add 
+The result is 63
+skx@vilya:~$ 
+</pre>
+</blockquote>
+
+
+<b>Call from Lua into your C application.</b>
+<blockquote>
+<p>The most interesting aspect of writing scriptable applications is to allow the script to contain your logic, calling into your application for the "hard" work.</p>
+<p>In my terms that involves writing a simple piece of C to display the sprites upon the screen - then having the lua application make calls such as "moveLeft", "moveRight", "isDead" etc.</p>
+<p>To call from <tt>Lua</tt> to your C functions you must first register them.  Then when they are called you have to do a couple of extra things from your C code:</p>
+<ul>
+<li>Fetch the arguments.</li>
+<li>Do whatever you wish with them.</li>
+<li>Push the results upon the stack.</li>
+<li>Return the number of results.</li>
+</ul>
+<p>In this next example we'll write a C function "average" which will average a list of numbers.  We will call this from the <tt>lua</tt> script "<tt>average.lua</tt>".</p>
+<p>The calling script will look like this:</p>
+<pre>
+avg, sum = average(10, 20, 30, 40,  50)
+
+print("The average is ", avg)
+print("The sum is ", sum)
+</pre>
+<p>The corresponding C code looks like this:</p>
+<pre>
+#include &lt;stdio.h&gt;
+
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+/* the Lua interpreter */
+lua_State* L;
+
+/* The function we'll call from the lua script */
+static int average(lua_State *L)
+{
+	/* get number of arguments */
+	int n = lua_gettop(L);
+	double sum = 0;
+	int i;
+
+	/* loop through each argument */
+	for (i = 1; i <= n; i++)
+	{
+	        if (!lua_isnumber(L, i)) 
+		{
+		      lua_pushstring(L, "Incorrect argument to 'average'");
+		      lua_error(L);
+		}
+
+		/* total the arguments */
+		sum += lua_tonumber(L, i);
+	}
+
+	/* push the average */
+	lua_pushnumber(L, sum / n);
+
+	/* push the sum */
+	lua_pushnumber(L, sum);
+
+	/* return the number of results */
+	return 2;
+}
+
+
+int main ( int argc, char *argv[] )
+{
+	/* initialize Lua */
+	L = lua_open();
+
+	/* load Lua base libraries */
+	lua_baselibopen(L);
+
+	/* register our function */
+	lua_register(L, "average", average);
+
+	/* run the script */
+	lua_dofile(L, "average.lua");
+
+	/* cleanup Lua */
+	lua_close(L);
+
+	return 0;
+}
+</pre>
+<p>(You may <a href="/articles/264/">download these files too</a>.)</p>
+<p>Compiling this and running it shows that we've:</p>
+<ul>
+<li>Loaded the script <tt>average.lua</tt>.</li>
+<li>Called from that script <b>back</b> into our C application.</li>
+</ul>
+<p>Compilation and execution look like this:</p>
+<pre>
+skx@vilya:~$ gcc -o average -Wall `lua-config --include --libs` average.c
+skx@vilya:~$ ./average 
+The average is  30
+The sum is      150
+</pre>
+</blockquote>
+
+<b>Other Tricks</b>
+<blockquote>
+<p>It is possible that you will want to setup some global variables from your C code which you wish the script to be able to use.  A good example of this is a version number.</p>
+<p>You can do that with the following code:</p>
+<pre>
+#define VERSION "0.7"
+
+lua_pushstring(L, "VERSION");
+lua_pushstring(L, VERSION);
+lua_settable(L, LUA_GLOBALSINDEX);
+</pre>
+<p>This allows your Lua code to do something like this:</p>
+<pre>
+print( "Version " .. VERSION );
+</pre>
+</blockquote>
+
+<p>If you've followed along you should be capable of embedding simple functions into external script.  Or writing main loops entirely in Lua.</p>
+<p>The <a href="http://www.lua.org/pil/">online Programming Lua book</a> contains a wealth of information about using the language, including:</p>
+<ul>
+<li><a href="http://www.lua.org/pil/24.html">An overview of the C API</a></li>
+</ul>
+<p>This section in particular, (and the following ones building upon it), show in detail how you can manage calling from C to <tt>Lua</tt>, and back again.</p>
+
+
+<div style="text-align: right;">
+</div>
+
+
+<div class="navigation">
+	<div class="row">
+        <span class="left">
+	<a href="/comment/onarticle/264">Add Comment</a>
+ <a href="/comment/feed/onarticle/264"><img src="/images/xml.gif" title="Subscribe to comments on this article." alt="XML logo" width="36" height="14"></a></span>
+         <span class="right">
+         </span>
+	<div class="spacer"> </div>
+	</div>
+
+
+	<p>&nbsp;</p>
+         <div class="row">
+	  <span class="left">
+           
+            <a href="/article/263/Creating_a_Debian_Firewall_-_A_step-by-step_tutorial">&lt;&lt;&lt; Creating a Debian Firewall - A step-by-step tutorial</a>
+           
+          </span>
+          <span class="right">
+           
+            <a href="/article/265/Discovering_new_packages_entering_Debian's_unstable_repository">Discovering new packages entering Debian's unstable repository &gt;&gt;&gt;</a>
+           
+          </span>
+	<div class="spacer"> </div>
+        </div>
+
+	</div>
+</div>
+
+<p>&nbsp;</p>
+ <div class="share"></div>
+<p>&nbsp;</p>
+
+
+
+	
+	<p></p>
+	<div class="advert">
+	<center>
+	<script type="text/javascript"><!--
+	google_ad_client = "pub-1910202134166551";
+	google_ad_width = 728;
+	google_ad_height = 90;
+	google_ad_format = "728x90_as";
+	google_ad_type = "text_image";
+	google_ad_channel ="4454478967";
+	//--></script>
+	<script type="text/javascript"
+	  src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+	</center>
+
+        
+	  <p  style="text-align: right;"><a href="/about/FAQ%20:%20Site%20Adverts">Why are these adverts here?</a></p>
+        
+	</div>
+	
+
+
+
+ <hr />
+ 
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_1">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_1">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (200.102.xx.xx) on Tue  4 Oct 2005  at 15:31 <br />
+</div>
+
+ <div class="body">
+  tolua++ is also a very nice tool. It enables you to take a function in C and have it readily available in Lua. It&#39;s a <a href="http://www.swig.org" rel="nofollow">swig</a> for lua. <br /><br /> Unfortunately, the version of tolua available in Debian is kind of old - it only works with Lua 4. <br />
+ </div>
+
+<p class="foot">
+ [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/1">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_2">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_2">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Steve">Steve</a>  (82.41.xx.xx) on Tue  4 Oct 2005  at 17:21 <br />
+[ <a href="/users/Steve/scratchpad">View Steve's Scratchpad</a> | <a href="/users/Steve/weblog">View Weblogs</a> ]</div>
+
+ <div class="body">
+  <p>Thanks for the link. In the past I&#39;ve used the C++ wrapper for Lua (lua++), but I figured I&#39;d not distract anybody by mentioning it.<p><a href="http://www.swig.org/">Swig</a> rocks. I&#39;ve used it several times to write Perl bindings for shared libraries, etc. Highly recommended.<p><a href="http://www.steve.org.uk/">Steve</a><br /> -- 
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_1">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/2">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_9">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_9">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (69.129.xx.xx) on Thu 13 Oct 2005  at 01:27 <br />
+</div>
+
+ <div class="body">
+  SWIG 1.3.26, which was released a few days ago, just added a lua module. I would suggest using SWIG, because it makes it a lot easier.
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_1">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/9">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_3">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_3">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (216.18.xx.xx) on Tue  4 Oct 2005  at 18:40 <br />
+</div>
+
+ <div class="body">
+  Interesting article - thanks! <br /><br /> -d <br />
+ </div>
+
+<p class="foot">
+ [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/3">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_4">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_4">C++ Code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Steve">Steve</a>  (82.41.xx.xx) on Wed  5 Oct 2005  at 02:39 <br />
+[ <a href="/users/Steve/scratchpad">View Steve's Scratchpad</a> | <a href="/users/Steve/weblog">View Weblogs</a> ]</div>
+
+ <div class="body">
+  <p>Since I realise I didn&#39;t use C++ in the article, despite mentioning it in the title here&#39;s a link to a quite demo I knocked up in C++:<ul><li><a href="http://www.steve.org.uk/Software/lua-c++/">Calling LUA from C++</a></ul><p>Sample usage:<pre>
+  /**
+   * Gain access to the single LUA intepretter object.
+   */
+  CLUAInstance *lua = CLUAInstance::getInstance();
+
+  /**
+   * Run a script with it!
+   */
+  lua-&gt;runScript( &quot;lua.lua&quot; );
+
+  /*
+   * Cleanup.
+   */
+  delete( lua );
+
+</pre><p><a href="http://www.steve.org.uk/">Steve</a><br /> -- 
+ </div>
+
+<p class="foot">
+ [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/4">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_5">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_5">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/divan">divan</a>  (83.170.xx.xx) on Wed  5 Oct 2005  at 05:14 <br />
+</div>
+
+ <div class="body">
+  Very nice! <br /> The same could be done with TCL, which is more powerful and widely spreaded, but more heavy and slowly. <br /> I&#39;ve made some tests, comparing LUA and TCL as embeddable languages, and LUA is definitely better choice for most cases.
+ </div>
+
+<p class="foot">
+ [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/5">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_6">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_6">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/lpenz">lpenz</a>  (200.102.xx.xx) on Wed  5 Oct 2005  at 15:35 <br />
+</div>
+
+ <div class="body">
+  Yeah. <br /> Not wanting to get into a flamewar, but if you&#39;re providing a scripting language in your application to non-TCL programmers, Lua is much better. It&#39;s easier, and more &quot;familiar&quot;. <br /> There&#39;s an excelent book on Lua at <a href="http://www.lua.org/pil/" rel="nofollow"><a href="http://www.lua.org/pil/" rel="nofollow">http://www.lua.org/pil/</a></a>.
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_5">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/6">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_7">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_7">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (201.20.xx.xx) on Thu  6 Oct 2005  at 15:19 <br />
+</div>
+
+ <div class="body">
+  &quot;The same could be done with TCL, which is more powerful and widely spreaded, but more heavy and slowly.&quot; <br /><br /> More powerful? Why would you say so?
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_5">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/7">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_8">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_8">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/divan">divan</a>  (83.170.xx.xx) on Thu  6 Oct 2005  at 23:37 <br />
+</div>
+
+ <div class="body">
+  It&#39;s my subjective opinion. At least, there are more TCL bindings for various APIs then LUA.
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_7">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/8">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+ <div class="indent">
+  
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_10">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_10">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (65.5.xx.xx) on Mon 17 Oct 2005  at 15:48 <br />
+</div>
+
+ <div class="body">
+  I don&#39;t know much about TCL, but writing a Lua library binding is pretty easy even without tolua++/swig/luabind. <br /><br /> It&#39;s what the language was meant for, i think. <br />
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_8">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/10">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+ </div>
+  
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_11">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_11">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (193.54.xx.xx) on Wed 19 Oct 2005  at 12:02 <br />
+</div>
+
+ <div class="body">
+  I have to say that scripting has looked like an Eldorado for me for a long time. Thanks for a nice and clear example of what scripting involves as steps in both parts (the C part and the script language part). <br /><br /> I&#39;ll certainly capitalize on that work while doing my script-embedding preparations for my program. <br /><br /> Is Lua good at numbers, I mean at dealing with the equivalent of double number in C with a wealth of decimal digits ? <br /><br /> I&#39;m still trying to find a scripting language that looks most like C, as I feel comfortable with C. Any ideas ? <br /><br /> Cheers, <br /><br /> Filippo Rusconi <br /> polyxmass.org 
+ </div>
+
+<p class="foot">
+ [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/11">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_12">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_12">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Steve">Steve</a>  (82.41.xx.xx) on Wed 19 Oct 2005  at 13:47 <br />
+[ <a href="/users/Steve/scratchpad">View Steve's Scratchpad</a> | <a href="/users/Steve/weblog">View Weblogs</a> ]</div>
+
+ <div class="body">
+  <p>Lua is good at dealing with numbers, so you shouldn&#39;t have any worries there.<p>For example:<pre>
+third = ( 1 / 3 )
+print ( third * 3 )
+1
+</pre><p>Other languages used for scripting with a C syntax? I&#39;m not too sure to be honest. I know that there are embeddable versions of C, such as <a href="http://root.cern.ch/root/Cint.html">CInt</a>, but I&#39;ve only ever used Perl, Python, or LUA for embedding. Of those Lua is the most C-like, and actually the simplest to embed and use..<p>My <a href="http://fortress.cvsrepository.org/">recent project</a> for writing security scanning scripts embeds LUA, and provides features such as port-scanning, and service detection. Using a C++ core and a set of LUA scripts it&#39;s very simple to develop with - somethign I&#39;d not have otherwise attempted ..<p><p><a href="http://www.steve.org.uk/">Steve</a><br /> -- 
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_11">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/12">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_13">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_13">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by suspended user <strike>debian88</strike>  (68.122.xx.xx) on Tue 12 Dec 2006  at 07:44 <br />
+</div>
+
+ <div class="body">
+  <br /> for pure c syntax scripting language, <br /> embeddable C/C++ interpreter Ch might be a solution for you: <br /><br /><a href="http://www.softintegration.com/products/sdk/embedch/" rel="nofollow">http://www.softintegration.com/products/sdk/embedch/</a><br />
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_11">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/13">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_14">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_14">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (213.54.xx.xx) on Thu 29 Mar 2007  at 11:17 <br />
+</div>
+
+ <div class="body">
+  At least in debian 4.0 you&#39;ll also need: <br /><br />apt-get install liblualib50-dev <br />
+ </div>
+
+<p class="foot">
+ [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/14">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_16">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_16">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (69.181.xx.xx) on Thu 10 Jun 2010  at 00:45 <br />
+</div>
+
+ <div class="body">
+  I know this is about 5 years late, but, thank you. This article helped me so much.
+ </div>
+
+<p class="foot">
+ [
+ 
+  Parent
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/16">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_18">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_18">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (71.97.xx.xx) on Mon 12 Mar 2012  at 22:00 <br />
+</div>
+
+ <div class="body">
+  Thank you for writing this excellent introduction! It&#39;s still relevant &amp; applicable today besides some minor API changes that have occurred over the years :)
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_16">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/18">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_19">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_19">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (173.176.xx.xx) on Fri  4 May 2012  at 17:48 <br />
+</div>
+
+ <div class="body">
+  very helpful article. 
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_18">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/19">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+ </div>
+  
+
+
+<p></p>
+
+
+<!-- Indent comments.
+     See matching loop to correctly terminate the comment indentation.
+  -->
+
+
+ <div class="indent">
+  
+
+ <div class="indent">
+  
+
+ <div class="indent">
+  
+
+
+
+<!-- Comment entry -->
+<div class="comment">
+  <div class="link">
+   
+   
+    <a href="/articles/264#comment_20">#</a>
+   
+   
+  </div>
+
+ <div class="title"><a name="comment_20">Re: Embedding a scripting language inside your C/C++ code</a>
+
+ </div>
+
+ <div class="tagline">
+ Posted by <a href="/users/Anonymous">Anonymous</a>  (142.231.xx.xx) on Thu  5 Jul 2012  at 19:39 <br />
+</div>
+
+ <div class="body">
+  Yes. Despite the deprecation of some functions in the article, it is by far the clearest step-by-step I&#39;ve found for embedding Lua in C/C++. <br /><br />Directly working with the stack is much better than using luabind, et al. If for nothing else, working with the stack allows one to supply a variable number of arguments to Lua functions. This is apparently impossible with luabind. <br /><br />Thanks for writing this detailed article!
+ </div>
+
+<p class="foot">
+ [
+ 
+  <a href="#comment_19">Parent</a>
+ 
+
+ 
+
+ 
+  | <a href="/comment/onarticle/264/20">Reply to this comment</a>
+ 
+
+ 
+
+ 
+
+ 
+  
+  
+ 
+
+ 
+]
+</p>
+
+</div>
+
+<!-- Terminate the indentation of the comments. -->
+
+ </div>
+  
+
+ </div>
+  
+
+ </div>
+  
+
+
+<p></p>
+
+
+
+
+  <!-- Closing tag for if_error -->
+
+                </div>
+            </div>
+        </div>
+        <div id="rightcol" class="side">
+            <div class="slide">
+
+
+
+<h4>Sign In</h4>
+<form id="user-login" action="/login" method="post">
+  <input type="hidden" name="mode" value="login">
+  <input type="hidden" name="target" value="" />
+  <p><b>Username</b>:<br/> <input id="name" name="lname" type="text" size="14" maxlength="25" /></p>
+  <p><b>Password</b>:<br /> <input id="pass" name="lpass" type="password" size="15" maxlength="25" /></p>
+  <p><input type="submit" name="submit" value="Login" /> </p>
+  <p>[<a href="/create/user/">Register</a>|<a href="/login">Advanced</a>]</p>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+
+<p>&nbsp;</p>
+<div id="flattr">
+  <h3>Flattr</h3>
+  <div style="text-align:center;"><a class="FlattrButton" style="display:none;" href="http://debian-administration.org"></a></div>
+</div>
+
+
+
+<p>&nbsp;</p>
+<div id="poll">
+  <h3>Current Poll</h3>
+  
+  <form method="post" action="/polls/166">
+    <p><input type="hidden" name="poll_id" value="166" /><b>Will you stick to systemd as the default in Debian?</b></p><p>
+      
+      <label><input type="radio" name="pollanswer" value="1" />Yes</label><br />
+      
+      <label><input type="radio" name="pollanswer" value="2" />No</label><br />
+      
+      <label><input type="radio" name="pollanswer" value="3" />Still undecided</label><br />
+      
+      <input type="hidden" name="mode" value="poll_vote" />
+      <input type="hidden" name="id" value="166" />
+      <input type="submit"  value="Vote" /><br />
+      <span class="votescast">
+	( <a href="/polls/166">686 votes ~ 33 comments</a> )</span></p>
+	                                                         </form>
+  
+</div>
+
+
+
+<p>&nbsp;</p>
+<div id="blogs">
+  <h3>Recent Weblogs</h3>
+  
+  <div class="weblogs">
+    
+    <div class="body">
+      <div class="title"><a href="/users/simonw/weblog/491">Logitech Wireless Headset with Jessie</a></div>
+      <div class="tagline">by <a href="/users/simonw">simonw</a></div>
+      <div class="comments"> </div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/Steve/weblog/245">Changes ...</a></div>
+      <div class="tagline">by <a href="/users/Steve">Steve</a></div>
+      <div class="comments">  <a href="/users/Steve/weblog/245#comments">2 comments</a></div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/naresh3410/weblog/1">linuc file system creation </a></div>
+      <div class="tagline">by <a href="/users/naresh3410">naresh3410</a></div>
+      <div class="comments"> </div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/ajt/weblog/213">Debian surprises</a></div>
+      <div class="tagline">by <a href="/users/ajt">ajt</a></div>
+      <div class="comments">  <a href="/users/ajt/weblog/213#comments">4 comments</a></div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/lee/weblog/51">Selective and multiple domain DKIM with Exim </a></div>
+      <div class="tagline">by <a href="/users/lee">lee</a></div>
+      <div class="comments"> </div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/dkg/weblog/115">Challenge: one reproducible package a week</a></div>
+      <div class="tagline">by <a href="/users/dkg">dkg</a></div>
+      <div class="comments"> </div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/mcortese/weblog/21">GNOME Wayland</a></div>
+      <div class="tagline">by <a href="/users/mcortese">mcortese</a></div>
+      <div class="comments">  <a href="/users/mcortese/weblog/21#comments">2 comments</a></div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/fugit/weblog/10">Building a certain Version of Debian</a></div>
+      <div class="tagline">by <a href="/users/fugit">fugit</a></div>
+      <div class="comments">  <a href="/users/fugit/weblog/10#comments">2 comments</a></div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/rkreider/weblog/5">It&#39;s been 7 Years</a></div>
+      <div class="tagline">by <a href="/users/rkreider">rkreider</a></div>
+      <div class="comments">  <a href="/users/rkreider/weblog/5#comments">1 comment</a></div>
+    </div>
+    
+    <div class="body">
+      <div class="title"><a href="/users/cisco/weblog/1">Hello World!</a></div>
+      <div class="tagline">by <a href="/users/cisco">cisco</a></div>
+      <div class="comments"> </div>
+    </div>
+    
+  
+  <p><a href="http://planet.debian-administration.org" title="Planet Debian Administration" style="float:right;">Archived weblogs</a></p>
+  <p></p>
+  
+  </div>
+</div>
+
+
+
+              <p>&nbsp;</p>
+
+              
+
+        
+           <div class="advert">
+<h3>Sponsored Links</h3>
+<p></p>
+<div align="center">
+<script type="text/javascript"><!--
+google_ad_client = "pub-1910202134166551";
+//200x90, created 08/12/07
+google_ad_slot = "2315151555";
+google_ad_width = 200;
+google_ad_height = 90;
+//--></script>
+<script type="text/javascript"
+src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+           
+	       <p><a href="/about/FAQ%20:%20Site%20Adverts">Why are these adverts here?</a></p>
+            
+	    </div>
+	
+
+   
+
+
+   
+
+
+
+            </div>
+        </div>
+      </div> <!-- end #content -->
+    </div> <!-- end #wrapper -->
+ <div id="footer">
+<p>Articles and comments are the property of their respective posters.</p>
+<p>Trademarks are the property of their respective owners.<br />  Debian is <a
+href="http://tarr.uspto.gov/servlet/tarr?regser=serial&amp;entry=75386376&amp;action=Request+Status">a registered trademark</a> of <a href="http://www.spi-inc.org">Software in the Public Interest, Inc</a>.</p>
+<p>This site is copyright &copy; 2004-2015 <a href="http://www.steve.org.uk/">Steve Kemp</a>.<br />Site hosting provided by <a href="http://www.bytemark.co.uk/">Bytemark Hosting</a> on the <a href="http://bigv.io/">BigV</a> platform.</p>
+<p><a href="/about/Syndication">Article Feeds in Atom, RSS, &amp; RDF formats</a></p>
+</div>
+</body>
+</html>

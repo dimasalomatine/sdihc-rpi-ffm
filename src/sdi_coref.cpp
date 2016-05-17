@@ -1,5 +1,5 @@
 /*
- * sdi_coref.c
+ * sdi_coref.cpp
  * 
  * Copyright 2014 dima <dima@debian>
  * 
@@ -23,8 +23,12 @@
 
 #include "sdi_coref.h"
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
 
 #include <stdio.h>
+#include <unistd.h>
 #include <pthread.h>
 #include <stdlib.h>
 
@@ -45,7 +49,7 @@ pthread_cond_t cond_ao;
 
 int globalwork=TRUE;
 
-void * th_global_wd()
+void * th_global_wd(void *ptr)
 {
         while(globalwork==TRUE&&immediatestop==0){
                
@@ -59,9 +63,10 @@ void * th_global_wd()
         immediatestop=1;
         
         printf("th_global_wd exit stop all...\n");
+        pthread_exit(NULL);
 }
 
-void * th_video_in_m_process()
+void * th_video_in_m_process(void *ptr)
 {
 	    char cmd[1024];
 	    int res;
@@ -93,9 +98,10 @@ void * th_video_in_m_process()
                 pthread_cond_signal(&cond_v);
         }
         printf("th_video_in_m_process exit...\n");
+        pthread_exit(NULL);
 }
 
-void * th_video_in_process()
+void * th_video_in_process(void *ptr)
 {
         while(globalwork){
                
@@ -107,9 +113,10 @@ void * th_video_in_process()
                  //
                   pthread_mutex_unlock(&lock_v);
         }
+        pthread_exit(NULL);
 }
 
-void * th_audio_in_m_process()
+void * th_audio_in_m_process(void *ptr)
 {
         while(globalwork){
                 pthread_mutex_lock(&lock_ai);
@@ -121,9 +128,10 @@ void * th_audio_in_m_process()
                 pthread_cond_signal(&cond_ai);
         }
         printf("th_audio_in_m_process exit...\n");
+        pthread_exit(NULL);
 }
 
-void * th_audio_in_process()
+void * th_audio_in_process(void *ptr)
 {
         while(globalwork){
                
@@ -135,9 +143,10 @@ void * th_audio_in_process()
                  //
                   pthread_mutex_unlock(&lock_ai);
         }
+        pthread_exit(NULL);
 }
 
-void * th_audio_out_m_process()
+void * th_audio_out_m_process(void *ptr)
 {
         while(globalwork){
                 pthread_mutex_lock(&lock_ao);
@@ -149,9 +158,10 @@ void * th_audio_out_m_process()
                 pthread_cond_signal(&cond_ao);
         }
         printf("th_audio_out_m_process exit...\n");
+        pthread_exit(NULL);
 }
 
-void * th_audio_out_process()
+void * th_audio_out_process(void *ptr)
 {
         while(globalwork){
                
@@ -163,10 +173,11 @@ void * th_audio_out_process()
                  //
                   pthread_mutex_unlock(&lock_ao);
         }
+        pthread_exit(NULL);
 }
 
 	
-	pthread_t tr0,tr, tr2,tr3;
+pthread_t tr0,tr, tr2,tr3;
 	
 int coref_start(int argc, char **argv)
 {
@@ -176,17 +187,18 @@ int coref_start(int argc, char **argv)
         pthread_create(&tr3,NULL,th_audio_out_m_process,NULL);
         
         
-        
-            
-        
  return 0;
 }
 
 int coref_join(int argc, char **argv){
-	 pthread_join(tr,NULL);
+	    pthread_join(tr,NULL);
         pthread_join(tr2,NULL);
         pthread_join(tr3,NULL);
         pthread_join(tr0,NULL);
         
  return 0;
 	}
+
+#if defined(__cplusplus)
+}
+#endif
